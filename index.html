@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shonen vs</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #485563, #29323c); /* Replace with your desired gradient colors */
+            color: #fff; /* Set text color to contrast with the background */
+            font-family: Arial, sans-serif; /* Choose a suitable font */
+        }
+        #container {
+            text-align: center;
+            overflow: hidden;
+        }
+        #leftCharacter, #rightCharacter {
+            background: linear-gradient(to bottom, #485563, #29323c); /* Replace with your desired gradient colors */
+            display: inline-block;
+            margin: 20px;
+            height: 500px;
+            width: 300px;
+            overflow: hidden;
+        }
+        #swingButton {
+            display: block;
+            margin: 20px auto;
+        }
+        img{
+            height: 80%;
+        }
+        li{
+            display: inline;
+            font-weight: 600;
+            font-size: 180%;
+            margin: 0 0 0 0.5rem;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="leftCharacter">
+            <img src="character1.jpg" alt="Shonen Character 1">
+            <p>Character 1</p>
+        </div>
+        <div id="rightCharacter">
+            <img src="character2.jpg" alt="Shonen Character 2">
+            <p>Character 2</p>
+        </div>
+        <input type="range" id="swingButton" min="0" max="1" step="0.5">
+        <p id="result"></p>
+    </div>
+
+    <!-- Ranking section for top 3 characters -->
+    <div id="ranking">
+        <h2>Top 3 Characters</h2>
+        <ol id="topCharacters">
+            <!-- This list will be updated dynamically -->
+        </ol>
+    </div>
+
+    <script>
+const characters = [
+    {
+        name: "Goku",
+        image: "https://upload.wikimedia.org/wikipedia/en/4/4c/GokumangaToriyama.png"
+    },
+    {
+        name: "Luffy",
+        image: "https://upload.wikimedia.org/wikipedia/en/c/cb/Monkey_D_Luffy.png"
+    },
+    {
+        name: "Naruto",
+        image: "https://static.wikia.nocookie.net/deathbattlefanon/images/2/2d/Naruto_uzumaki_render_by_multiplestriker-d55ouag.png"
+    //https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg
+    },
+    {
+        name: "Ichigo",
+        image: "https://upload.wikimedia.org/wikipedia/en/1/1e/IchigoKurosakiBleach.jpg"
+    },
+    {
+        name: "Gon",
+        image: "https://static.wikia.nocookie.net/all-worlds-alliance/images/f/f8/GonPR.png"
+    },
+    {
+        name: "Deku",
+        image: "https://upload.wikimedia.org/wikipedia/en/d/db/Izuku_Midoriya_%28My_Hero_Academia_character%29.png"
+    },
+    {
+        name: "Kenshin",
+        image: "https://pm1.aminoapps.com/6302/50fb82660581bce3673ea20cf017c183b879a71d_hq.jpg"
+    },
+    {
+        name: "Yusuke",
+        image: "https://static.wikia.nocookie.net/love-exalted/images/0/0d/Yusuke_Urameshi.png"
+    },
+    {
+        name: "Gintoki",
+        image: "https://static.wikia.nocookie.net/all-worlds-alliance/images/3/3c/Gin_Gintoki_5.png"
+    },
+    {
+        name: "Asta",
+        image: "https://upload.wikimedia.org/wikipedia/en/8/8a/AstaWSJIssue362015.png"
+    },
+    {
+        name: "Toriko",
+        image: "https://static.wikia.nocookie.net/toriko/images/2/26/Toriko_US.png"
+    },
+    {
+        name: "Jotaro",
+        image: "https://upload.wikimedia.org/wikipedia/en/9/9a/JotaroKujo.png"
+    },
+    {
+        name: "Killua",
+        image: "https://static.wikia.nocookie.net/oneminutemelee/images/8/82/Killua-killua-zoldyck-2011-34976863-244-342.png"
+    },
+    {
+        name: "Yugi",
+        image: "https://static.wikia.nocookie.net/fictionalcharacterbattles/images/b/b9/It_s_time_to_duel_by_dbkaifan2009-d4dk24u.png"
+    },
+    {
+        name: "Edward",
+        image: "https://static.wikia.nocookie.net/anime-cinematic-universe/images/0/05/Ed_prof.png"
+    },
+    {
+        name: "Allen",
+        image: "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/AllenWalkercross.png/220px-AllenWalkercross.png"
+    },
+    {
+        name: "Eren",
+        image: "https://static.wikia.nocookie.net/all-worlds-alliance/images/7/7f/Eren_yeager_render_by_lopmonify-d7cqfzo.png"
+    },
+    {
+        name: "Tanjiro",
+        image: "https://upload.wikimedia.org/wikipedia/en/e/ea/Tanjirou_manga.png"
+    }
+];
+
+// You can access each character using shonenJumpCharacters[index]
+
+
+        const leftCharacter = document.getElementById('leftCharacter');
+        const rightCharacter = document.getElementById('rightCharacter');
+        const swingButton = document.getElementById('swingButton');
+        const result = document.getElementById('result');
+
+        let currentLeftCharacterIndex = 0;
+        let currentRightCharacterIndex = 1;
+
+        function updateCharacterDisplay() {
+            leftCharacter.innerHTML = `<img src="${characters[currentLeftCharacterIndex].image}" alt="${characters[currentLeftCharacterIndex].name}"><p>${characters[currentLeftCharacterIndex].name}</p>`;
+            rightCharacter.innerHTML = `<img src="${characters[currentRightCharacterIndex].image}" alt="${characters[currentRightCharacterIndex].name}"><p>${characters[currentRightCharacterIndex].name}</p>`;
+        }
+
+        leftCharacter.style.border = '10px';
+        leftCharacter.style.borderRadius = '10px';
+
+        rightCharacter.style.border = '10px';
+        rightCharacter.style.borderRadius = '10px';
+
+        // Initialize win counts for characters
+        const characterWins = {};
+
+        // Function to update the win count for a character
+        function updateCharacterWinCount(characterIndex) {
+            const character = characters[characterIndex].name;
+            characterWins[character] = (characterWins[character] || 0) + 1;
+        }
+
+        // Function to update the ranking
+        function updateRanking() {
+            const topCharactersList = document.getElementById('topCharacters');
+            // Clear the existing list
+            topCharactersList.innerHTML = '';
+
+            // Sort characters by wins
+            const sortedCharacters = Object.keys(characterWins).sort((a, b) => characterWins[b] - characterWins[a]);
+            
+            const fontColors = ['black','purple','white'];
+            const winnerColors = ['gold','silver','brown'];
+            // Display the top 3 characters
+            for (let i = 0; i < Math.min(3, sortedCharacters.length); i++) {
+                const characterName = sortedCharacters[i];
+                const wins = characterWins[characterName];
+                const listItem = document.createElement('li');
+                listItem.textContent = `${characterName}: ${wins} wins`;
+                listItem.style.color  = fontColors[i];
+                listItem.style.backgroundColor = winnerColors[i]
+                topCharactersList.appendChild(listItem);
+            }
+        }
+        swingButton.addEventListener('input', () => {
+            const value = parseFloat(swingButton.value);
+            if (value < 0.5) {
+                leftCharacter.style.backgroundColor = "green";
+                rightCharacter.style.backgroundColor = "white";
+            } else if(value>0.5){
+                rightCharacter.style.backgroundColor = "green";
+                leftCharacter.style.backgroundColor = "white";
+            }else{
+                rightCharacter.style.backgroundColor = "white";
+                leftCharacter.style.backgroundColor = "white";
+            }
+        });
+
+        swingButton.addEventListener('change', () => {
+            const value = parseFloat(swingButton.value);
+            if (value < 0.5) {
+                result.textContent = `You chose ${characters[currentLeftCharacterIndex].name}`;
+                updateCharacterWinCount(currentLeftCharacterIndex);
+            } else {
+                result.textContent = `You chose ${characters[currentRightCharacterIndex].name}`;
+                updateCharacterWinCount(currentRightCharacterIndex);
+            }
+
+
+            // Update the ranking
+            updateRanking();
+            // Randomly select new characters
+            currentLeftCharacterIndex = Math.floor(Math.random() * characters.length);
+            currentRightCharacterIndex = Math.floor(Math.random() * characters.length);
+            updateCharacterDisplay();
+            swingButton.value = 0.5;
+            rightCharacter.style.backgroundColor = "white";
+                leftCharacter.style.backgroundColor = "white";
+        });
+
+        // Initial character display
+        updateCharacterDisplay();
+
+
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
